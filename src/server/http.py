@@ -1,5 +1,5 @@
 from src.server.tcp import TCPServer
-from src.constants.http_response_constants import HTTPResponseConstants
+from src.constants.http_response import HTTPResponseConstants
 
 
 class HTTPServer(TCPServer):
