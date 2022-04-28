@@ -33,7 +33,10 @@ class TCPServer:
                 connection.close()
         except KeyboardInterrupt:
             self.socket.close()
-    
+        except Exception as err:
+            logging.info(str(err))
+            self.socket.close()
+            
     def handle_request(self, raw_data):
         return raw_data
            

@@ -23,8 +23,24 @@ class TestTCPServer:
 
     def test_connecting_to_tcp_server(self, client):
         host = '127.0.0.1'
-        port = 12345
+        port = 12344
         tcp_server = TCPServer(host=host, port=port)
         running_server = self._start_server(tcp_server)
         client.connect((host, port))
- 
+        client.close()
+        tcp_server.socket.close()
+
+    def test_receive_sending_data(self, client):
+        host = '127.0.0.1'
+        port = 12349
+        tcp_server = TCPServer(host=host, port=port)
+        running_server = self._start_server(tcp_server)
+        client.connect((host, port))
+        message: bytes = b'hello server!'
+        client.sendall(message)
+        response = client.recv(1024)
+        assert message == response
+        client.close()
+        tcp_server.socket.close()
+
+        
