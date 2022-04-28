@@ -1,7 +1,7 @@
 import logging
 
 
-from src.tcp_server.tcp_server import TCPServer
+from src.server.tcp import TCPServer
 from src.config.runtime_config import RuntimeConfig
 
 
