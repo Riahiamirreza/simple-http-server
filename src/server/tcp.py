@@ -21,7 +21,7 @@ class TCPServer:
         return socket_object
 
     def start(self):
-        logging.info('Starting litening at: ' + self.socket_name) 
+        logging.info('Start litening at: ' + self.socket_name) 
         try:
             while True:
                 connection, addr = self.socket.accept()
