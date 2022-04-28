@@ -17,9 +17,7 @@ class HTTPServer(TCPServer):
         request = HTTPRequest(raw_data)
 
         # log request inf:
-        logging.info(request.headers)
-        logging.info(request.method)
-        logging.info(request.body)
+        logging.info(str(request))
 
         response_line: str = self._get_response_line(request)
         response_object: ResponseObject = self._get_response_object(request)
@@ -41,9 +39,14 @@ class HTTPServer(TCPServer):
         return headers
 
     def _get_response_object(self, request) -> ResponseObject:
-        body_dict: dict = {'name': 'Ali'}
-        body: str = json.dumps(body_dict)
-        content_type = ContentTypeEnum.APPLICATION_JSON
+        # body_dict: dict = {'name': 'Ali'}
+        body: str = """<html>
+            <body>
+            <h1>Request received!</h1>
+            <body>
+            </html>
+        """
+        content_type = ContentTypeEnum.TEXT_HTML
         response_object = ResponseObject(body, content_type)
         return response_object
 

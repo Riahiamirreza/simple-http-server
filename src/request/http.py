@@ -53,3 +53,9 @@ class HTTPRequest:
     @body.getter
     def body(self):
         return self._request_body
+
+    def __str__(self):
+        string = self.method + '\n'
+        string += str(self.headers) + '\n'
+        string += self.body.decode() + '\n'
+        return string

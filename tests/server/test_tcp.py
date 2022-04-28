@@ -27,8 +27,8 @@ class TestTCPServer:
         tcp_server = TCPServer(host=host, port=port)
         running_server = self._start_server(tcp_server)
         client.connect((host, port))
-        client.close()
-        tcp_server.socket.close()
+        # client.close()
+        # tcp_server.socket.close()
 
     def test_receive_sending_data(self, client):
         host = '127.0.0.1'
@@ -40,7 +40,7 @@ class TestTCPServer:
         client.sendall(message)
         response = client.recv(1024)
         assert message == response
-        client.close()
-        tcp_server.socket.close()
+        # client.close()
+        # tcp_server.socket.close()
 
         
