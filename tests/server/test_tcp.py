@@ -11,6 +11,7 @@ class TestTCPServer:
     @staticmethod
     def _start_server(server):
         thr = threading.Thread(target=server.start, args=(), kwargs={})
+        thr.daemon = True
         thr.start()
         return thr
     
@@ -26,5 +27,4 @@ class TestTCPServer:
         tcp_server = TCPServer(host=host, port=port)
         running_server = self._start_server(tcp_server)
         client.connect((host, port))
-        running_server.join()
  
