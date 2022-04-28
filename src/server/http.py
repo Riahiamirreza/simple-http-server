@@ -7,24 +7,32 @@ from src.constants.http_response import HTTPResponseConstants
 from src.constants.http_headers import HTTPHeadersConstants
 from src.enum.content_type_enum import ContentTypeEnum
 from src.utils.response_object import ResponseObject
+from src.request.http import HTTPRequest
 
 
 class HTTPServer(TCPServer):
     LINE_TERMINATOR: bytes = b'\r\n'
 
-    def handle_request(self, data):
-        response_line: str = self._get_response_line(data)
-        response_object: ResponseObject = self._get_response_object(data)
-        headers: dict = self._get_response_headers(data, response_object)
+    def handle_request(self, raw_data):
+        request = HTTPRequest(raw_data)
+
+        # log request inf:
+        logging.info(request.headers)
+        logging.info(request.method)
+        logging.info(request.body)
+
+        response_line: str = self._get_response_line(request)
+        response_object: ResponseObject = self._get_response_object(request)
+        headers: dict = self._get_response_headers(request, response_object)
         
         response: bytes = self._construct_response(response_line, headers, response_object)
         print(response.decode())
         return response
 
-    def _get_response_line(self, data) -> str:
+    def _get_response_line(self, request) -> str:
         return HTTPResponseConstants.OK_200
     
-    def _get_response_headers(self, data, response_object: ResponseObject) -> dict:
+    def _get_response_headers(self, request, response_object: ResponseObject) -> dict:
         headers: dict = {
             HTTPHeadersConstants.CONTENT_TYPE: response_object.content_type,
             HTTPHeadersConstants.CONTENT_LENGTH: response_object.content_length,
@@ -32,7 +40,7 @@ class HTTPServer(TCPServer):
         }
         return headers
 
-    def _get_response_object(self, data) -> ResponseObject:
+    def _get_response_object(self, request) -> ResponseObject:
         body_dict: dict = {'name': 'Ali'}
         body: str = json.dumps(body_dict)
         content_type = ContentTypeEnum.APPLICATION_JSON

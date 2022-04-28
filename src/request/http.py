@@ -14,15 +14,14 @@ class HTTPRequest:
         self._request_body: bytes = self._extract_body()
 
     def _extract_body(self):
-        return self.data.split(self.CRLF * 2, maxsplit=1)
+        return self.data.split(self.CRLF * 2, maxsplit=1)[1]
 
     def _extract_headers(self):
         raw_header_list: List = self.data.decode().split(self.CRLF.decode())[1:]
         headers: dict = dict()
         for header in raw_header_list:
             if ': ' in header:
-                header_key, header_value = header.split()
-                header_key = header_key[:-1]
+                header_key, header_value = header.split(': ', maxsplit=1)
                 headers[header_key] = header_value
         return headers
     

@@ -2,7 +2,7 @@ from enum import Enum, unique
 
 
 @unique
-class HTTPMethods(Enum):
+class HTTPMethodEnum(Enum):
     HTTP_GET: str = 'GET'
     HTTP_POST: str = 'POST'
     HTTP_PUT: str = 'PUT'

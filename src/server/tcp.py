@@ -24,13 +24,19 @@ class TCPServer:
         logging.info('Start litening at: ' + self.socket_name) 
         try:
             while True:
-                connection, addr = self.socket.accept()
-                logging.info(f'Address {self.format_address(addr)} connected.')
-                data = connection.recv(self.RECEIVING_SIZE)
-                logging.info(data)
-                response = self.handle_request(data)
-                connection.sendall(data)
-                connection.close()
+                try:
+                    connection, addr = self.socket.accept()
+                    logging.info(f'Address {self.format_address(addr)} connected.')
+                    data = connection.recv(self.RECEIVING_SIZE)
+                    logging.info(data)
+                    response = self.handle_request(data)
+                    connection.sendall(data)
+                    connection.close()
+                except Exception as err:
+                    if isinstance(err, KeyboardInterrupt):
+                        raise
+                    logging.error(err)
+                    continue
         except KeyboardInterrupt:
             self.socket.close()
 
