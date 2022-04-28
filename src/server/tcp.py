@@ -5,7 +5,7 @@ import socket
 class TCPServer:
     SOCKET_NAME_FORMAT: str = '{host}:{port}'
     ADDRESS_FORMAT: str = '{host}:{port}'
-    RECEIVING_SIZE: int = 1024
+    RECEIVING_SIZE: int = 1024 * 1024
 
     def __init__(self, host: str = '127.0.0.1', port: int = 8080):
         self.host = host

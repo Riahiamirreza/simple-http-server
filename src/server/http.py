@@ -18,7 +18,7 @@ class HTTPServer(TCPServer):
         headers: dict = self._get_response_headers(data, response_object)
         
         response: bytes = self._construct_response(response_line, headers, response_object)
-        logging.info(response.decode())
+        print(response.decode())
         return response
 
     def _get_response_line(self, data) -> str:
@@ -27,7 +27,8 @@ class HTTPServer(TCPServer):
     def _get_response_headers(self, data, response_object: ResponseObject) -> dict:
         headers: dict = {
             HTTPHeadersConstants.CONTENT_TYPE: response_object.content_type,
-            HTTPHeadersConstants.CONTENT_LENGTH: response_object.content_length
+            HTTPHeadersConstants.CONTENT_LENGTH: response_object.content_length,
+            HTTPHeadersConstants.CONNECTION: 'Closed'
         }
         return headers
 
