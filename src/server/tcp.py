@@ -30,7 +30,7 @@ class TCPServer:
                     data = connection.recv(self.RECEIVING_SIZE)
                     logging.info(data)
                     response = self.handle_request(data)
-                    connection.sendall(data)
+                    connection.sendall(response)
                     connection.close()
                 except Exception as err:
                     if isinstance(err, KeyboardInterrupt):
