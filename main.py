@@ -13,4 +13,5 @@ def run_server(host: str, port: int):
 
 if __name__ == '__main__':
     logging.basicConfig(level=RuntimeConfig.LOGGING_LEVEL)
-    run_server(host='127.0.0.1', port=8080)
+    run_server(host=RuntimeConfig.HOST_ADDRESS , port=RuntimeConfig.DEFAULT_PORT)
+
