@@ -38,13 +38,11 @@ class TCPServer:
                     logging.error(err)
                     continue
         except KeyboardInterrupt:
+            logging.info(
+                'Closing socket on port {}.'.format(self.port)
+            )
+        finally:
             self.socket.close()
-
-    def end(self):
-        logging.info(
-            'Closing socket on port {}.'.format(self.port)
-        )
-        self.socket.close()
             
     def handle_request(self, raw_data):
         return raw_data

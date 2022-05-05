@@ -8,7 +8,6 @@ from src.config.runtime_config import RuntimeConfig
 def run_server(host: str, port: int):
     server = HTTPServer(host=host, port=port)
     server.start()
-    server.end()
 
 
 if __name__ == '__main__':
