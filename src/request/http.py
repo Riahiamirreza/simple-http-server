@@ -12,6 +12,7 @@ class HTTPRequest:
         self._request_method: str = self._extract_http_method()
         self._request_headers: dict = self._extract_headers()
         self._request_body: bytes = self._extract_body()
+        self._request_uri: str = self._extract_uri()
 
     def _extract_body(self):
         return self.data.split(self.CRLF * 2, maxsplit=1)[1]
@@ -24,11 +25,23 @@ class HTTPRequest:
                 header_key, header_value = header.split(': ', maxsplit=1)
                 headers[header_key] = header_value
         return headers
-    
+
     def _extract_http_method(self):
         raw_http_method: List[str] = self.data.decode().split()[0]
         http_method: str = HTTPMethodEnum.get_http_method_by_name(raw_http_method)
         return http_method
+
+    def _extract_uri(self):
+        uri: List[str] = self.data.decode().split()[1]
+        return uri
+
+    @property
+    def uri(self):
+        ...
+
+    @uri.getter
+    def uri(self):
+        return self._request_uri
 
     @property
     def method(self):
@@ -41,7 +54,7 @@ class HTTPRequest:
     @property
     def headers(self):
         ...
-    
+
     @headers.getter
     def headers(self):
         return self._request_headers
@@ -49,7 +62,7 @@ class HTTPRequest:
     @property
     def body(self):
         ...
-    
+
     @body.getter
     def body(self):
         return self._request_body
