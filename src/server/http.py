@@ -1,11 +1,13 @@
 import json
 import logging
+import os
 
 
 from src.server.tcp import TCPServer
 from src.config.runtime_config import RuntimeConfig
 from src.constants.http_response import HTTPResponseConstants
 from src.constants.http_headers import HTTPHeadersConstants
+from src.constants.html_error_messages import HTMLErrorMessages
 from src.enum.content_type_enum import ContentTypeEnum
 from src.enum.http_method_enum import HTTPMethodEnum
 from src.utils.response_object import ResponseObject
@@ -18,6 +20,7 @@ class HTTPServer(TCPServer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.root_dir = RuntimeConfig.SERVER_ROOT_DIR
+        self.status_code: int = 0
 
     def handle_request(self, raw_data):
         request = HTTPRequest(raw_data)
@@ -50,8 +53,13 @@ class HTTPServer(TCPServer):
         ...
 
     def _get_response_line(self, request) -> str:
-        return HTTPResponseConstants.OK_200
-    
+        self.address: str = self.root_dir + request.uri
+        if os.path.isfile(self.address):
+            self.status_code = 200
+            return HTTPResponseConstants.OK_200
+        self.status_code = 404
+        return HTTPResponseConstants.NOT_FOUND_404
+
     def _get_response_headers(self, request, response_object: ResponseObject) -> dict:
         headers: dict = {
             HTTPHeadersConstants.CONTENT_TYPE: response_object.content_type,
@@ -61,15 +69,15 @@ class HTTPServer(TCPServer):
         return headers
 
     def _get_response_object(self, request) -> ResponseObject:
-        # body_dict: dict = {'name': 'Ali'}
-        body: str = """<html>
-            <body>
-            <h1>Request received!</h1>
-            <body>
-            </html>
-        """
-        content_type = ContentTypeEnum.TEXT_HTML
-        response_object = ResponseObject(body, content_type)
+        if self.status_code == 200:
+            body = open(self.address, 'r').read()
+            content_type = ContentTypeEnum.TEXT_HTML
+            response_object = ResponseObject(body, content_type)
+        elif self.status_code == 404:
+            body: str = HTMLErrorMessages.NOT_FOUND_404
+            content_type = ContentTypeEnum.TEXT_HTML
+            response_object = ResponseObject(body, content_type)
+
         return response_object
 
     @staticmethod
